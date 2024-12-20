@@ -17,7 +17,7 @@ router.get('/balance', authMiddleware, async (req: Request, res: Response) => {
         },
     })
     res.status(200).json({
-        balance
+        balance: balance?.balance,
     })
     return; 
 })
@@ -42,7 +42,7 @@ router.post('/transfer', authMiddleware, (req: Request, res: Response)=>{
             const usersExist = await prisma.user.findMany({
                 where: {
                     OR : [
-                        { id: bodyObject.data?.to ? Number(bodyObject.data?.to) : undefined,},
+                        { id: bodyObject.data?.to},
                         { id: fromUser},
                     ]
                 },
@@ -73,7 +73,7 @@ router.post('/transfer', authMiddleware, (req: Request, res: Response)=>{
                     },
                 },
                 where: {
-                    userId: bodyObject.data?.to ? Number(bodyObject.data.amount) : undefined,
+                    userId: bodyObject.data?.to ,
                 },
             })
 
@@ -91,7 +91,13 @@ router.post('/transfer', authMiddleware, (req: Request, res: Response)=>{
             })
             return;
         }
-        else reportError(String(err));
+        else {
+            res.status(400).json({
+                msg: 'Some unknow Error occcured',
+            })
+            reportError(String(err));
+            return;
+        }
     }
     res.status(200).json({
         msg: "Transaction Completed",

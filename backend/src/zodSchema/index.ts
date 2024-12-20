@@ -17,7 +17,7 @@ const userPassword = z.string();
 const partialUser = User.partial(); 
 
 const transferSchema = z.object({
-    to: z.string(),
+    to: z.number(),
     amount: z.number(),
 })
 

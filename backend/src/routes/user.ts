@@ -16,12 +16,12 @@ type bulkReqQuery = {
     filter: string;
 }
 
-router.post('/signup', async (req, res)=> {
+router.post('/signup', async (req: Request, res: Response) => {
     const body = req.body;
     const bodyObject = User.safeParse(body);
     if(!bodyObject.success){
         res.status(400).json({
-            msg: "Wrong input format"
+            msg: "Wrong input format",
         });
         return;
     }
@@ -52,7 +52,7 @@ router.post('/signup', async (req, res)=> {
     const jwToken = jwt.sign({userId: addUserRes.id}, aivenConfig.JWT_SECRET);
     res.status(200).json({
         msg: `User ${addUserRes.email} is created successfully`,
-        jst: jwToken,
+        jwt: jwToken,
     })
     return;
 })

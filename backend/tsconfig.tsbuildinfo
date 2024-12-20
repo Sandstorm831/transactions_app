@@ -1,1 +1,1 @@
-{"root":["./global.d.ts","./src/config.ts","./src/index.ts"],"version":"5.7.2"}
+{"root":["./custom_types/env.d.ts","./custom_types/express.d.ts","./src/client.ts","./src/config.ts","./src/index.ts","./src/middleware.ts","./src/routes/account.ts","./src/routes/index.ts","./src/routes/user.ts","./src/zodSchema/index.ts"],"version":"5.7.2"}
