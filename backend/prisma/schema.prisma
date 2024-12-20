@@ -18,4 +18,12 @@ model User{
   name String
   email String @unique
   password String
+  account Accounts[]
+}
+
+model Accounts{
+  accountId Int @id@default(autoincrement())
+  balance Int
+  userId Int
+  user User @relation(fields: [userId], references: [id])
 }

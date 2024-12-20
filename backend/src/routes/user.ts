@@ -12,6 +12,10 @@ interface UpdateObject {
     password?: string,
 }
 
+type bulkReqQuery = {
+    filter: string;
+}
+
 router.post('/signup', async (req, res)=> {
     const body = req.body;
     const bodyObject = User.safeParse(body);
@@ -35,6 +39,16 @@ router.post('/signup', async (req, res)=> {
     const addUserRes = await prisma.user.create({
         data: bodyObject.data,
     })
+
+    // Initialize the initial balance by a random number between 1-10000
+    await prisma.accounts.create({
+        data: {
+            userId: addUserRes.id,
+            balance: Math.random()*10000 + 1,
+        }
+    })
+    // ----------------------
+    
     const jwToken = jwt.sign({userId: addUserRes.id}, aivenConfig.JWT_SECRET);
     res.status(200).json({
         msg: `User ${addUserRes.email} is created successfully`,
@@ -99,6 +113,27 @@ router.put('/', authMiddleware, async (req: Request, res: Response) => {
     })
     res.status(200).json({
         msg: "Updated Successfully",
+    })
+    return;
+})
+
+router.get('/bulk', authMiddleware, async (req: Request<{}, any, {}, bulkReqQuery>, res: Response) => {
+    const qry: string = req.query.filter;
+    const bulkQueryUpdate = await prisma.user.findMany({
+        take: 10,
+        where: {
+            name: {
+                contains: qry,
+            },
+        },
+        select: {
+            id: true,
+            name: true,
+            email: true,
+        }
+    })
+    res.status(200).json({
+        users: bulkQueryUpdate,
     })
     return;
 })
