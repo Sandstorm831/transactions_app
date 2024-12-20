@@ -1,4 +1,4 @@
-import {z} from 'zod';
+import { z } from 'zod';
 
 const User = z.object({
     email: z.string().email(), 
@@ -11,4 +11,9 @@ const userSignIn = z.object({
     password: z.string(),
 })
 
-export {User, userSignIn};
+const userName = z.string();
+const userPassword = z.string();
+
+const partialUser = User.partial(); 
+
+export {User, userSignIn, userName, userPassword, partialUser};
