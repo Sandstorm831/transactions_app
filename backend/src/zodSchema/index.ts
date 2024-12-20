@@ -16,4 +16,9 @@ const userPassword = z.string();
 
 const partialUser = User.partial(); 
 
-export {User, userSignIn, userName, userPassword, partialUser};
+const transferSchema = z.object({
+    to: z.string(),
+    amount: z.number(),
+})
+
+export {User, userSignIn, userName, userPassword, partialUser, transferSchema};
