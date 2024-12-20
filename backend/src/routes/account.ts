@@ -39,7 +39,7 @@ router.post('/transfer', authMiddleware, async (req: Request, res: Response)=>{
 
     try{
         await prisma.$transaction(async(tx) => {
-            const usersExist = await prisma.user.findMany({
+            const usersExist = await tx.user.findMany({
                 where: {
                     OR : [
                         { id: bodyObject.data?.to},
@@ -50,7 +50,7 @@ router.post('/transfer', authMiddleware, async (req: Request, res: Response)=>{
             if(usersExist.length !== 2){
                 throw new Error(`USERS NOT FOUND`);
             }
-            const updateSource = await prisma.accounts.update({
+            const updateSource = await tx.accounts.update({
                 data: {
                     balance: {
                         decrement: bodyObject.data?.amount,
@@ -63,7 +63,7 @@ router.post('/transfer', authMiddleware, async (req: Request, res: Response)=>{
             if(updateSource.balance < 0){
                 throw new Error(`NOT ENOUGH BALANCE`);
             }
-            await prisma.accounts.update({
+            await tx.accounts.update({
                 data: {
                     balance: {
                         increment: bodyObject.data?.amount,
