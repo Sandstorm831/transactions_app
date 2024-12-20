@@ -22,7 +22,7 @@ router.get('/balance', authMiddleware, async (req: Request, res: Response) => {
     return; 
 })
 
-router.post('/transfer', authMiddleware, (req: Request, res: Response)=>{
+router.post('/transfer', authMiddleware, async (req: Request, res: Response)=>{
     const fromUser = req.userId;
     if(fromUser === undefined) {
         res.json(400).json({
@@ -38,7 +38,7 @@ router.post('/transfer', authMiddleware, (req: Request, res: Response)=>{
     }
 
     try{
-        prisma.$transaction(async(tx) => {
+        await prisma.$transaction(async(tx) => {
             const usersExist = await prisma.user.findMany({
                 where: {
                     OR : [
@@ -48,9 +48,6 @@ router.post('/transfer', authMiddleware, (req: Request, res: Response)=>{
                 },
             });
             if(usersExist.length !== 2){
-                res.status(400).json({
-                    msg: "Error with finding Users"
-                })
                 throw new Error(`USERS NOT FOUND`);
             }
             const updateSource = await prisma.accounts.update({
@@ -81,21 +78,21 @@ router.post('/transfer', authMiddleware, (req: Request, res: Response)=>{
     } catch(err){
         if( err instanceof Error && err.message === `USERS NOT FOUND`){
             res.status(400).json({
-                mesg: err.message
+                mesg: `error with finding users`,
             })
             return;
         }
         else if(err instanceof Error && err.message === `NOT ENOUGH BALANCE`){
             res.status(400).json({
-                msg: `${fromUser} doesn't have enough balance to send ${bodyObject.data?.amount}`,
+                msg: `User ${fromUser} doesn't have enough balance to send ${bodyObject.data?.amount}`,
             })
             return;
         }
         else {
             res.status(400).json({
                 msg: 'Some unknow Error occcured',
+                error: String(err)
             })
-            reportError(String(err));
             return;
         }
     }
