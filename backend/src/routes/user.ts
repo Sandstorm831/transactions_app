@@ -1,6 +1,6 @@
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
-import { User } from '../zodSchema';
+import { User, userSignIn } from '../zodSchema';
 import jwt from 'jsonwebtoken';
 import aivenConfig from '../config';
 const router = express.Router();
@@ -11,7 +11,7 @@ router.post('/signup', async (req, res)=> {
     const bodyObject = User.safeParse(body);
     if(!bodyObject.success){
         res.status(400).json({
-            msg: "Wrong input"
+            msg: "Wrong input format"
         });
         return;
     }
@@ -35,6 +35,35 @@ router.post('/signup', async (req, res)=> {
         jst: jwToken,
     })
     return;
+})
+
+
+router.post('/signin', async (req, res) => {
+    const body = req.body;
+    const bodyObject = userSignIn.safeParse(body);
+    if(!bodyObject.success){
+        res.status(400).json({
+            msg: "Wrong Input format",
+        })
+        return;
+    }
+    const uniqueCheck = await prisma.user.findUnique({
+        where: {
+            email: bodyObject.data.email,
+        }
+    });
+    if(!uniqueCheck){
+        res.status(401).json({
+            msg: "Invalid Credentials",
+        })
+        return;
+    }
+    const jwToken = jwt.sign({userId: uniqueCheck.id}, aivenConfig.JWT_SECRET);
+    res.status(200).json({
+        token: jwToken,
+    })
+    return;
+
 })
 
 export {router as userRouter}

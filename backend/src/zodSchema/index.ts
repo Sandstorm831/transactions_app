@@ -6,4 +6,9 @@ const User = z.object({
     password: z.string(),
 });
 
-export {User};
+const userSignIn = z.object({
+    email: z.string().email(),
+    password: z.string(),
+})
+
+export {User, userSignIn};
