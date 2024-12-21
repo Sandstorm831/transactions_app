@@ -2,7 +2,7 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import { Eye, EyeClosed } from "lucide-react";
 
-export function NormalInut({
+export function NormalInput({
   label,
   placeholder,
   type,
