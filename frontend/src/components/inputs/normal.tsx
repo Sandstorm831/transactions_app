@@ -7,11 +7,15 @@ export function NormalInput({
   placeholder,
   type,
   id,
+  value,
+  setValue,
 }: {
   label: string;
   placeholder: string;
   type: string;
   id: string;
+  value: string;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
 }) {
   return (
     <div className="flex mt-5">
@@ -19,7 +23,13 @@ export function NormalInput({
         <Label className="font-bold mb-1" htmlFor={id}>
           {label}
         </Label>
-        <Input type={type} id={id} placeholder={placeholder} />
+        <Input
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          type={type}
+          id={id}
+          placeholder={placeholder}
+        />
       </div>
     </div>
   );
@@ -30,11 +40,15 @@ export function PasswordInput({
   id,
   isVisible,
   setIsVisible,
+  password,
+  setPassword,
 }: {
   label: string;
   id: string;
   isVisible: boolean;
   setIsVisible: React.Dispatch<React.SetStateAction<boolean>>;
+  password: string;
+  setPassword: React.Dispatch<React.SetStateAction<string>>;
 }) {
   return (
     <div className="flex mt-5">
@@ -42,7 +56,7 @@ export function PasswordInput({
         <Label className="font-bold mb-1" htmlFor={id}>
           {label}
         </Label>
-        <Input type={isVisible ? "text" : "password"} id={id} placeholder="" />
+        <Input value={password} onChange={(e) => setPassword(e.target.value)} type={isVisible ? "text" : "password"} id={id} placeholder="" />
         {isVisible ? (
           <Eye
             className="absolute right-2 z-10 bottom-1 cursor-pointer"

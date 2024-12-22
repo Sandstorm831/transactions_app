@@ -17,7 +17,7 @@ export default function Signin(){
                     <NormalInput label="Email" type="email" placeholder="premchand@gmail.com" id="email" />
                     <PasswordInput label="Password" id="password" isVisible={isvisible} setIsVisible={setIsVisible} />
                     <SignUpInButton title="Sign in with Email" />
-                    <SignUpInBottom title="Don't have an account? " underlined="Sign up" />
+                    <SignUpInBottom title="Don't have an account? " underlined="Sign up" link="/signup"/>
                 </div>
             </div>
         </div>

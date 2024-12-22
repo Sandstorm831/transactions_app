@@ -11,16 +11,14 @@ export default function Send() {
           <div className="w-full bg-white h-max flex flex-col p-8 rounded-lg shadow-sm">
             <SignUpInHeading title="Send Money" />
             <div className="mt-8">
-                <UserCircleName user="User" />
+              <UserCircleName user="User" />
             </div>
-
             <NormalInput
               label="Amount (in Rs)"
               placeholder="Enter Amount"
               type="number"
               id="name"
             />
-
             <div className="w-full mt-4">
               <CardButton title="Initiate transfer" />
             </div>

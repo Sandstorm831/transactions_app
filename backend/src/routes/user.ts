@@ -35,6 +35,7 @@ router.post('/signup', async (req: Request, res: Response) => {
         res.status(409).json({
             msg: "User already exists",
         })
+        return;
     }
     const addUserRes = await prisma.user.create({
         data: bodyObject.data,
