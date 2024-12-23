@@ -1,9 +1,18 @@
-import { CardButton } from "@/components/buttons/cardButton";
+import { SendMoneyButton } from "@/components/buttons/sendButton";
 import { SignUpInHeading } from "@/components/headings";
 import { NormalInput } from "@/components/inputs/normal";
 import { UserCircleName } from "@/components/username/username";
+import { useState } from "react";
+import { Navigate, useSearchParams } from "react-router";
 
 export default function Send() {
+  const [cash, setCash] = useState(0);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const toId:number|undefined = searchParams.get("id") ? Number(searchParams.get("id")) : undefined
+  const toName: string|null = searchParams.get('name')
+  if(toId === undefined || toName === null){
+    return <Navigate to="/dashboard" replace={true} />;
+  }
   return (
     <div className="w-screen h-screen bg-gray-300">
       <div className="w-full h-full flex justify-center">
@@ -11,16 +20,18 @@ export default function Send() {
           <div className="w-full bg-white h-max flex flex-col p-8 rounded-lg shadow-sm">
             <SignUpInHeading title="Send Money" />
             <div className="mt-8">
-              <UserCircleName user="User" />
+              <UserCircleName user={toName} />
             </div>
             <NormalInput
               label="Amount (in Rs)"
               placeholder="Enter Amount"
               type="number"
               id="name"
+              value={cash}
+              setValue={setCash}
             />
             <div className="w-full mt-4">
-              <CardButton title="Initiate transfer" />
+              <SendMoneyButton title="Initiate transfer" cash={cash} id={toId} />
             </div>
           </div>
         </div>

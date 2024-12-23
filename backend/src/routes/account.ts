@@ -31,10 +31,11 @@ router.post('/transfer', authMiddleware, async (req: Request, res: Response)=>{
         return;
     }
     const bodyObject = transferSchema.safeParse(req.body);
-    if(!bodyObject.success){
+    if(!bodyObject.success || (bodyObject.data.amount === 0)){
         res.status(400).json({
             msg: "Invalid arguments"
         })
+        return;
     }
 
     try{
@@ -99,6 +100,7 @@ router.post('/transfer', authMiddleware, async (req: Request, res: Response)=>{
     res.status(200).json({
         msg: "Transaction Completed",
     });
+    return;
 })
 
 export {router as accountRouter};

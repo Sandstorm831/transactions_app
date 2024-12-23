@@ -14,7 +14,7 @@ export function getCookies(name: string){
 interface userItem{
   name: string;
   email: string;
-  password: string;
+  id: number;
 }
 
 type userItemArray = Array<userItem>
@@ -25,6 +25,7 @@ export default function Dashboard() {
   const [filter, setFilter] = useState("");
   const [users, setUsers] = useState<userItemArray>([]);
   const dispatch = useAppDispatch();
+  const logObject = useAppSelector(state => state.logger);
 
   async function fetchUsers(){
     try{
@@ -88,7 +89,7 @@ export default function Dashboard() {
           />
         </div>
         <div className="w-full mt-1 flex flex-col px-8 my-5 h-full overflow-scroll">
-          {users && users.length ? users.map((obj) => <UserCard name={obj.name} />) : null}
+          {users && users.length ? users.map((obj) => { return obj.name === logObject.Name ? <></> : <UserCard name={obj.name} id={obj.id} />} ) : null}
         </div>
       </div>
     </div>

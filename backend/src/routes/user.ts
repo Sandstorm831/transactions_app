@@ -123,7 +123,7 @@ router.put('/', authMiddleware, async (req: Request, res: Response) => {
 router.get('/bulk', authMiddleware, async (req: Request<{}, any, {}, bulkReqQuery>, res: Response) => {
     const qry: string = req.query.filter;
     const bulkQueryUpdate = await prisma.user.findMany({
-        take: 10,
+        // take: 10,
         where: {
             name: {
                 contains: qry,

@@ -14,8 +14,8 @@ export function NormalInput({
   placeholder: string;
   type: string;
   id: string;
-  value: string;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
+  value: string | number;
+  setValue: React.Dispatch<React.SetStateAction<string>> | React.Dispatch<React.SetStateAction<number>>;
 }) {
   return (
     <div className="flex mt-5">
