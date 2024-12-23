@@ -41,8 +41,8 @@ router.post('/signup', async (req: Request, res: Response) => {
         data: bodyObject.data,
     })
 
-    // Initialize the initial balance by a random number between 1-10000
-    await prisma.accounts.create({
+    // Initialize the initial balance by a random number between 1-10000 --------
+    const accDetails = await prisma.accounts.create({
         data: {
             userId: addUserRes.id,
             balance: Math.random()*10000 + 1,
@@ -53,7 +53,9 @@ router.post('/signup', async (req: Request, res: Response) => {
     const jwToken = jwt.sign({userId: addUserRes.id}, aivenConfig.JWT_SECRET);
     res.status(200).json({
         msg: `User ${addUserRes.email} is created successfully`,
-        jwt: jwToken,
+        name: addUserRes.name,
+        balance: accDetails.balance,
+        jwt: `Bearer ${jwToken}`,
     })
     return;
 })
@@ -81,7 +83,7 @@ router.post('/signin', async (req, res) => {
     }
     const jwToken = jwt.sign({userId: uniqueCheck.id}, aivenConfig.JWT_SECRET);
     res.status(200).json({
-        token: jwToken,
+        token: `Bearer ${jwToken}`,
     })
     return;
 

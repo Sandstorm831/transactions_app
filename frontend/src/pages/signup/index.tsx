@@ -5,39 +5,47 @@ import { NormalInput, PasswordInput } from "@/components/inputs/normal";
 import { SignUpInButton } from "@/components/buttons/signupsignin";
 import { SignUpInBottom } from "@/components/subheadings/bottom";
 import axios from "axios";
-import Cookies from "universal-cookie";
+import { useAppDispatch } from "@/app/hooks";
+import { flipper } from "@/features/loggedin/loggedInSlice";
+import { useNavigate } from "react-router";
 
 export default function Signup(){
+    const navigate = useNavigate();
     const [isvisible, setIsVisible] = useState(false);
     const [disabled, setDisabled] = useState(false);
     const [clicker, setClicker] = useState(false);
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const cookies = new Cookies(null, {path: '/'});
+    const dispatch = useAppDispatch();
+
+    async function onSignup(){
+        try{
+            const response = await axios.post("http://localhost:3000/api/v1/user/signup", {
+                name,
+                email,
+                password,
+            },{
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            setDisabled((x)=>!x);
+            document.cookie = `JWT=${response.data.jwt}; path=/;SameSite=strict`;
+            dispatch(flipper({name: response.data.name, balance: response.data.balance}));
+            navigate('/dashboard');
+        } catch(err){
+            setDisabled((x)=>!x);
+            console.log(err);
+        }
+        return;
+    }
+
 
     useEffect(() => {
-        async function onSignup(){
-            try{
-                const response = await axios.post("http://localhost:3000/api/v1/user/signup", {
-                    name,
-                    email,
-                    password,
-                },{
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-                setDisabled((x)=>!x);
-                cookies.set('JWT', `Bearer ${response.data.jwt}`);
-                console.log(response.data.jwt);
-            } catch(err){
-                setDisabled((x)=>!x);
-                console.log(err);
-            }
-            return;
+        if(name !== "" && password !== "" && email !== ""){
+            onSignup();
         }
-        onSignup();
     }, [clicker])
 
     return <div className="w-screen h-screen bg-gray-300">
