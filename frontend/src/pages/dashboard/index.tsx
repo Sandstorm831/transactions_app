@@ -60,8 +60,8 @@ export default function Dashboard() {
     }
   }
   useEffect(() => {
-    fillUser();
     const debouncer = setTimeout(async () => {
+      fillUser();
       fetchUsers();
     }, 200)
 
