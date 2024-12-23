@@ -17,8 +17,8 @@ export const loggedIn = createSlice({
     name: 'logger',
     initialState,
     reducers: {
-        flipper: (state,action: {payload: {name: string, balance: number}, type: string}) => {
-            state.isLoggedIn = !state.isLoggedIn
+        flipper: (state,action: {payload: {name: string, balance: number, login: boolean}, type: string}) => {
+            state.isLoggedIn = action.payload.login
             state.Name = action.payload.name
             state.balance = action.payload.balance
         }

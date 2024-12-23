@@ -6,10 +6,12 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction): void =
     const authHeader = req.headers.authorization;
     if(!authHeader || !authHeader.startsWith('Bearer ')){
         res.status(403).json({});
+        return;
     }
     const jwtoken = authHeader?.split(" ")[1];
     if (jwtoken === undefined) {
         res.status(403).json({})
+        return;
     }
     const authJWT = jwtoken as string;
     try {
@@ -20,11 +22,13 @@ const authMiddleware = (req: Request, res: Response, next: NextFunction): void =
         }
         else if(verification?.userId === undefined){
             res.status(403).json({});
+            return;
         }
         req.userId = verification.userId;
         next();
     } catch(err){
         res.status(403).json({});
+        return;
     }
 }
 

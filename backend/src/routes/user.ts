@@ -141,4 +141,37 @@ router.get('/bulk', authMiddleware, async (req: Request<{}, any, {}, bulkReqQuer
     return;
 })
 
+router.get("/userinfo", authMiddleware, async (req: Request, res: Response) => {
+    try{
+
+        const userInfo = await prisma.$transaction(async(tx) =>{
+            const userInfo = await tx.user.findUnique({
+                where:{
+                    id: req.userId,
+                },
+                select:{
+                    id: true,
+                    name: true,
+                }
+            })
+            const accInfo = await tx.accounts.findUnique({
+                where:{
+                    userId: req.userId
+                },
+                select:{
+                    balance: true
+                }
+            })
+            res.status(200).json({
+                userId: userInfo?.id,
+                userName: userInfo?.name,
+                userBalance: accInfo?.balance,
+            })
+            return;
+        })
+    } catch(err){
+        console.log(err);
+    }
+})
+
 export {router as userRouter}

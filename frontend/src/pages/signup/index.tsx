@@ -31,8 +31,8 @@ export default function Signup(){
                 }
             });
             setDisabled((x)=>!x);
-            document.cookie = `JWT=${response.data.jwt}; path=/;SameSite=strict`;
-            dispatch(flipper({name: response.data.name, balance: response.data.balance}));
+            document.cookie = `JWT=${response.data.jwt}; path=/; SameSite=strict`;
+            dispatch(flipper({name: response.data.name, balance: response.data.balance, login: true}));
             navigate('/dashboard');
         } catch(err){
             setDisabled((x)=>!x);
