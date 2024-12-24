@@ -14,9 +14,10 @@ export function NormalInput({
   placeholder: string;
   type: string;
   id: string;
-  value: string | number;
-  setValue: React.Dispatch<React.SetStateAction<string>> | React.Dispatch<React.SetStateAction<number>>;
+  value: string;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
 }) {
+
   return (
     <div className="flex mt-5">
       <div className="flex flex-col w-full">
@@ -68,6 +69,52 @@ export function PasswordInput({
             onClick={() => setIsVisible((x) => !x)}
           />
         )}
+      </div>
+    </div>
+  );
+}
+
+
+export function NumberInput({
+  label,
+  placeholder,
+  type,
+  id,
+  value,
+  setValue,
+  setDisabled,
+}: {
+  label: string;
+  placeholder: string;
+  type: string;
+  id: string;
+  value: number;
+  setValue: React.Dispatch<React.SetStateAction<number>>;
+  setDisabled: React.Dispatch<React.SetStateAction<boolean>>; 
+}) {
+
+  function handleNumberChange(e: React.ChangeEvent<HTMLInputElement>){
+    if(isNaN(Number(e.target.value))){
+      setDisabled(true);
+      setValue(value);
+      return;
+    }
+    setDisabled(false);
+    setValue(Number(e.target.value))
+  }
+  return (
+    <div className="flex mt-5">
+      <div className="flex flex-col w-full">
+        <Label className="font-bold mb-1" htmlFor={id}>
+          {label}
+        </Label>
+        <Input
+          value={value}
+          onChange={(e) => handleNumberChange(e)}
+          type={type}
+          id={id}
+          placeholder={placeholder}
+        />
       </div>
     </div>
   );

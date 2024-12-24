@@ -1,6 +1,5 @@
 export function UserCircleName({ user }: { user: string }) {
   const u: string = user[0].toUpperCase();
-  console.log(u);
 
   return (
     <div className="flex justify-center w-max">

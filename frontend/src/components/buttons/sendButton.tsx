@@ -4,7 +4,7 @@ import { getCookies } from "@/pages/dashboard";
 import { useState } from "react";
 import { useNavigate } from "react-router";
 
-export function SendMoneyButton({ title, cash, id }: { title: string, cash: number, id: number }) {
+export function SendMoneyButton({ title, cash, id, secondDisable }: { title: string, cash: number, id: number, secondDisable: boolean}) {
     const [prompt, setPrompt] = useState(title);
     const [disable, setDisable] = useState(false);
     const navigate = useNavigate();
@@ -31,7 +31,7 @@ export function SendMoneyButton({ title, cash, id }: { title: string, cash: numb
 
   return (
     <div className="h-full w-full flex justify-center">
-      <Button onClick={() => handleMoneyTransfer()} disabled={disable} variant="default" className="w-full h-full font-bold py-2 px-5">
+      <Button onClick={() => handleMoneyTransfer()} disabled={disable || secondDisable } variant="default" className="w-full h-full font-bold py-2 px-5">
         {prompt}
       </Button>
     </div>
