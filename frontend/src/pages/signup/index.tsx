@@ -5,9 +5,8 @@ import { NormalInput, PasswordInput } from "@/components/inputs/normal";
 import { SignUpInButton } from "@/components/buttons/signupsignin";
 import { SignUpInBottom } from "@/components/subheadings/bottom";
 import axios from "axios";
-import { useAppDispatch } from "@/app/hooks";
-import { flipper } from "@/features/loggedin/loggedInSlice";
 import { useNavigate } from "react-router";
+import { getCookies } from "../dashboard";
 
 export default function Signup(){
     const navigate = useNavigate();
@@ -17,7 +16,6 @@ export default function Signup(){
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const dispatch = useAppDispatch();
 
     async function onSignup(){
         try{
@@ -32,7 +30,6 @@ export default function Signup(){
             });
             setDisabled((x)=>!x);
             document.cookie = `JWT=${response.data.jwt}; path=/; SameSite=strict`;
-            dispatch(flipper({name: response.data.name, balance: response.data.balance, login: true}));
             navigate('/dashboard');
         } catch(err){
             setDisabled((x)=>!x);
@@ -41,6 +38,12 @@ export default function Signup(){
         return;
     }
 
+    useEffect(() =>{
+        const JWT = getCookies("JWT");
+        if(JWT !== null){
+            navigate('/dashboard');
+        }
+    }, [])
 
     useEffect(() => {
         if(name !== "" && password !== "" && email !== ""){
