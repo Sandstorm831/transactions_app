@@ -170,8 +170,14 @@ router.get("/userinfo", authMiddleware, async (req: Request, res: Response) => {
             return;
         })
     } catch(err){
+        res.status(400).json({
+            msg: "Some error occured",
+            err: err,
+        })
         console.log(err);
+        return;
     }
+    return;
 })
 
 export {router as userRouter}

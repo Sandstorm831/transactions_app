@@ -5,21 +5,29 @@ import { transferSchema } from '../zodSchema';
 const router = express.Router();
 const prisma = new PrismaClient({log: ['query', 'info']});
 
-
-
 router.get('/balance', authMiddleware, async (req: Request, res: Response) => {
-    const balance = await prisma.accounts.findUnique({
-        where:{
-            userId: req.userId,
-        },
-        select: {
-            balance: true,
-        },
-    })
-    res.status(200).json({
-        balance: balance?.balance,
-    })
-    return; 
+    try{
+        const balance = await prisma.accounts.findUnique({
+            where:{
+                userId: req.userId,
+            },
+            select: {
+                balance: true,
+            },
+        })
+        res.status(200).json({
+            balance: balance?.balance,
+        })
+        return; 
+    }catch(err){
+        res.status(400).json({
+            msg: "Some Error occured",
+            err: err
+        })
+        console.log(err);
+        return;
+    }
+    return;
 })
 
 router.post('/transfer', authMiddleware, async (req: Request, res: Response)=>{

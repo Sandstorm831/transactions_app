@@ -5,6 +5,7 @@ import Signin from './pages/signin'
 import Dashboard from './pages/dashboard'
 import Send from './pages/send'
 import RootPage from './pages/root'
+import PageNotFound from './pages/404'
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
         <Route path='/signin' element={<Signin />} />
         <Route path='/dashboard' element={<Dashboard />} />
         <Route path='/send' element={<Send />} />
+        <Route path='*' element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
   )
