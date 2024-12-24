@@ -5,10 +5,15 @@ import { UserCard } from "@/components/userCards/user";
 import { flipper } from "@/features/loggedin/loggedInSlice";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 
 export function getCookies(name: string){
   const cookie = document.cookie.split("; ").find((row) => row.startsWith( `${name}=`));
   return cookie ? cookie.split("=")[1] : null;
+}
+
+export function deleteCookies(name: string){
+  document.cookie = `${name}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;`; // Set the expiry on a past date
 }
 
 interface userItem{
@@ -26,7 +31,7 @@ export default function Dashboard() {
   const [users, setUsers] = useState<userItemArray>([]);
   const dispatch = useAppDispatch();
   const logObject = useAppSelector(state => state.logger);
-
+  const navigate = useNavigate();
   async function fetchUsers(){
     try{
       const response = await axios.get('http://localhost:3000/api/v1/user/bulk', {
@@ -59,6 +64,14 @@ export default function Dashboard() {
       console.log(err);
     }
   }
+
+  useEffect(() =>{
+    const JWT = getCookies("JWT");
+    if(JWT === null){
+        navigate('/');
+    }
+}, [])
+
   useEffect(() => {
     const debouncer = setTimeout(async () => {
       fillUser();
